@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VitaFlow - Familie</title>
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f6f3ee;
+      --surface: #ffffff;
+      --surface-soft: #f4efe8;
+      --surface-warm: #fcf8f2;
+      --text: #2d2a24;
+      --muted: #726d65;
+      --primary: #246a73;
+      --primary-soft: #dceced;
+      --secondary: #7f5aa2;
+      --secondary-soft: #efe7f8;
+      --success: #5e7f45;
+      --warning: #b9772f;
+      --danger: #b44c58;
+      --border: #ddd5ca;
+      --shadow: 0 10px 24px rgba(56, 43, 26, 0.06);
+      --radius-xl: 24px;
+      --radius-lg: 18px;
+      --radius-md: 14px;
+      --font: 'Satoshi', Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background:
+        radial-gradient(circle at top left, #fbf7f1 0%, #f6f3ee 45%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .app {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .brand-eyebrow {
+      font-size: 0.95rem;
+      color: var(--primary);
+      font-weight: 700;
+      margin-bottom: 6px;
+      letter-spacing: 0.02em;
+    }
+
+    .title h1 {
+      margin: 0;
+      font-size: clamp(2rem, 1.5rem + 1vw, 2.7rem);
+      line-height: 1.1;
+    }
+
+    .title p {
+      margin: 10px 0 0;
+      color: var(--muted);
+      max-width: 700px;
+      font-size: 1.05rem;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .button {
+      border: none;
+      border-radius: 16px;
+      padding: 15px 20px;
+      min-height: 52px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .button.primary {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 6px 16px rgba(36, 106, 115, 0.18);
+    }
+
+    .button.secondary {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .button:hover {
+      transform: translateY(-1px);
+    }
+
+    .hero,
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      padding: 28px;
+      background: linear-gradient(180deg, #fffdf9 0%, #ffffff 100%);
+      margin-bottom: 18px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .hero h2 {
+      margin: 0 0 10px;
+      font-size: clamp(1.6rem, 1.2rem + 1vw, 2rem);
+      line-height: 1.15;
+    }
+
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .status-box {
+      margin-top: 18px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      background: var(--surface-soft);
+      padding: 16px 18px;
+      border-radius: 18px;
+    }
+
+    .status-dot {
+      width: 16px;
+      height: 16px;
+      min-width: 16px;
+      border-radius: 50%;
+      margin-top: 4px;
+      background: var(--warning);
+      box-shadow: 0 0 0 6px rgba(185, 119, 47, 0.12);
+    }
+
+    .status-box strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 1.05rem;
+    }
+
+    .focus-box {
+      background: var(--surface-warm);
+      border: 1px solid #eadfce;
+      border-radius: 18px;
+      padding: 18px;
+    }
+
+    .focus-label {
+      font-size: 0.95rem;
+      color: var(--primary);
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .focus-box strong {
+      display: block;
+      font-size: 1.2rem;
+      margin-bottom: 6px;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .chip {
+      background: var(--surface-soft);
+      border: 1px solid #e5ddd2;
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 0.95rem;
+    }
+
+    .grid-2,
+    .grid-3 {
+      display: grid;
+      gap: 18px;
+    }
+
+    .grid-2 {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .card {
+      padding: 22px;
+    }
+
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 1.35rem;
+      line-height: 1.2;
+    }
+
+    .card p {
+      margin: 0 0 14px;
+      color: var(--muted);
+    }
+
+    .task,
+    .signal,
+    .upload-box,
+    .support-box,
+    .burden-box {
+      background: var(--surface-soft);
+      border-radius: 16px;
+      padding: 14px;
+      margin-top: 12px;
+    }
+
+    .task strong,
+    .signal strong,
+    .support-box strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 1.02rem;
+    }
+
+    .task-list,
+    .signal-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .task {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .task-icon,
+    .signal-icon {
+      width: 36px;
+      height: 36px;
+      min-width: 36px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: #fff;
+      border: 1px solid var(--border);
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .signal {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .signal-icon {
+      color: var(--secondary);
+    }
+
+    .upload-box input {
+      width: 100%;
+      margin-top: 12px;
+      font: inherit;
+    }
+
+    .file-list {
+      margin-top: 12px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .file-item {
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: #fff;
+      border: 1px solid var(--border);
+      font-size: 0.96rem;
+    }
+
+    .burden-box {
+      background: #faf5ff;
+      border: 1px solid #e6d8f2;
+    }
+
+    .burden {
+      height: 18px;
+      background: #eadff4;
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 14px 0 10px;
+    }
+
+    .burden > span {
+      display: block;
+      height: 100%;
+      width: 58%;
+      background: var(--secondary);
+      transition: width 0.2s ease;
+    }
+
+    .kpi {
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      margin-top: 14px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: #fff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 620px;
+    }
+
+    th,
+    td {
+      padding: 14px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--muted);
+      font-weight: 700;
+      background: #fcfbf8;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .status-pill {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      background: var(--surface-soft);
+      border: 1px solid #e5ddd2;
+    }
+
+    .pill-ok {
+      background: #eef6e8;
+      border-color: #d6e7c8;
+      color: #45662f;
+    }
+
+    .pill-now {
+      background: #fff3ea;
+      border-color: #efd8c8;
+      color: #8d4a19;
+    }
+
+    .pill-later {
+      background: #ece8ff;
+      border-color: #d8cff6;
+      color: #64458b;
+    }
+
+    .kpi-card h3 {
+      margin-bottom: 10px;
+    }
+
+    .gentle-note {
+      margin-top: 16px;
+      padding: 16px;
+      border-radius: 16px;
+      background: #fff8ee;
+      border: 1px solid #f0dec3;
+    }
+
+    .gentle-note strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    @media (max-width: 920px) {
+      .hero-grid,
+      .grid-2,
+      .grid-3 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .app {
+        padding: 16px;
+      }
+
+      .topbar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .actions {
+        width: 100%;
+      }
+
+      .actions .button {
+        width: 100%;
+      }
+
+      .hero,
+      .card {
+        padding: 18px;
+        border-radius: 20px;
+      }
+
+      .title h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div class="title">
+        <div class="brand-eyebrow">VitaFlow</div>
+        <h1>Familie & mantelzorger</h1>
+        <p>
+          Een eenvoudige, warme overzichtsapp voor wie mee ondersteunt:
+          wat vraagt vandaag aandacht, wie doet wat en wanneer is extra hulp slim.
+        </p>
+      </div>
+
+      <div class="actions">
+        <button class="button secondary" onclick="alert('Hier kan later rechtstreeks contact met verpleegkundige of Nurseline komen.')">
+          Verpleegkundige contacteren
+        </button>
+        <button class="button primary" onclick="shuffleTasks()">
+          Taken beter verdelen
+        </button>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-grid">
+        <div>
+          <h2>Wat is vandaag echt belangrijk?</h2>
+          <p>
+            Deze omgeving toont bewust alleen de zaken die je als familie nodig hebt:
+            een paar aandachtspunten, een haalbare taakverdeling en een duidelijk moment om hulp in te schakelen.
+          </p>
+
+          <div class="status-box">
+            <span class="status-dot" id="familyStatusDot"></span>
+            <div>
+              <strong id="familyStatusTitle">Er is lichte extra aandacht nodig.</strong>
+              <span class="muted" id="familyStatusText">
+                Medicatie, duizeligheid en gewicht verdienen vandaag wat extra opvolging, maar het blijft beheersbaar.
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <aside class="focus-box">
+          <div class="focus-label">Vandaag de kern</div>
+          <strong>Niet alles hoeft door één persoon gedragen te worden.</strong>
+          <div class="muted">
+            Verdeel kleine taken slim over meerdere mensen. Dat geeft rust voor iedereen.
+          </div>
+
+          <div class="chips">
+            <span class="chip">Kleine acties</span>
+            <span class="chip">Samen opvolgen</span>
+            <span class="chip">Hulp tijdig inschakelen</span>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="grid-2">
+      <article class="card">
+        <h3>Wat vandaag te doen is</h3>
+        <p>
+          Concrete, haalbare acties. Geen lange lijst, wel wat nu echt telt.
+        </p>
+
+        <div class="task-list">
+          <div class="task">
+            <div class="task-icon">1</div>
+            <div>
+              <strong>Medicatie even checken</strong>
+              <div class="muted">Marie miste gisteren haar avondmedicatie.</div>
+            </div>
+          </div>
+
+          <div class="task">
+            <div class="task-icon">2</div>
+            <div>
+              <strong>Na de lunch kort bellen</strong>
+              <div class="muted">Vraag rustig of ze zich duizelig of kortademig voelt.</div>
+            </div>
+          </div>
+
+          <div class="task">
+            <div class="task-icon">3</div>
+            <div>
+              <strong>Woningcheck inplannen</strong>
+              <div class="muted">Het losse tapijt in de gang best laten wegnemen.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="gentle-note">
+          <strong>Belangrijk om te onthouden</strong>
+          <span class="muted">
+            Familie hoeft niet alles zelf op te lossen. VitaFlow helpt signaleren wanneer professionele steun nuttig wordt.
+          </span>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3>Wat VitaFlow vandaag opmerkt</h3>
+        <p>
+          Geen medische overload, wel een paar begrijpelijke signalen die helpen om vooruit te kijken.
+        </p>
+
+        <div class="signal-list">
+          <div class="signal">
+            <div class="signal-icon">•</div>
+            <div>
+              <strong>Valrisico stijgt licht</strong>
+              <div class="muted">De loopsnelheid in huis daalde deze week een beetje.</div>
+            </div>
+          </div>
+
+          <div class="signal">
+            <div class="signal-icon">•</div>
+            <div>
+              <strong>Gewicht vraagt aandacht</strong>
+              <div class="muted">De komende dagen even mee opvolgen is verstandig.</div>
+            </div>
+          </div>
+
+          <div class="signal">
+            <div class="signal-icon">•</div>
+            <div>
+              <strong>Verpleegkundige kan meevolgen</strong>
+              <div class="muted">Bij extra klachten kan de Nurseline eenvoudig aansluiten.</div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="grid-2" style="margin-top:18px;">
+      <article class="card">
+        <h3>Documenten toevoegen</h3>
+        <p>
+          Handig voor familie én zorgteam: medische info, planning, thuiszorgnotities of een foto van medicatie.
+        </p>
+
+        <div class="upload-box">
+          <strong>Kies bestanden</strong>
+          <div class="muted">
+            Bijvoorbeeld een ontslagbrief, medicatielijst, sociale documenten of praktische afspraken.
+          </div>
+          <input type="file" id="familyUpload" multiple />
+          <div class="file-list" id="familyFileList">
+            <div class="file-item">Nog geen nieuwe documenten toegevoegd.</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3>Jouw draagkracht</h3>
+        <p>
+          Ook mantelzorg verdient opvolging. Deze check helpt om overbelasting sneller te zien.
+        </p>
+
+        <div class="burden-box">
+          <strong>Hoe zwaar voelt het nu?</strong>
+          <div class="burden">
+            <span id="burdenFill"></span>
+          </div>
+          <div class="kpi" id="burdenScore">58 / 100</div>
+          <div class="muted" id="burdenText">
+            Licht verhoogde belasting. Het is slim om taken te spreiden of hulp te laten aansluiten.
+          </div>
+        </div>
+
+        <div class="support-box">
+          <strong>Goede zorg is ook vol te houden zorg.</strong>
+          <div class="muted">
+            Een evenwichtige taakverdeling voorkomt dat één persoon alles moet dragen.
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="card" style="margin-top:18px;">
+      <h3>Wie doet wat?</h3>
+      <p>
+        Een rustige familiecockpit met duidelijke afspraken. Zo vermijd je misverstanden en dubbele inspanningen.
+      </p>
+
+      <div class="table-wrap">
+        <table id="taskTable">
+          <tr>
+            <th>Taak</th>
+            <th>Wie</th>
+            <th>Status</th>
+          </tr>
+          <tr>
+            <td>Medicatie ophalen</td>
+            <td>Anne</td>
+            <td><span class="status-pill pill-later">Gepland voor morgen</span></td>
+          </tr>
+          <tr>
+            <td>Boodschappen</td>
+            <td>Els</td>
+            <td><span class="status-pill pill-ok">Klaar</span></td>
+          </tr>
+          <tr>
+            <td>Oefeningen begeleiden</td>
+            <td>Sam</td>
+            <td><span class="status-pill pill-later">2x deze week</span></td>
+          </tr>
+          <tr>
+            <td>Telefooncheck</td>
+            <td>Tom</td>
+            <td><span class="status-pill pill-now">Vanavond</span></td>
+          </tr>
+        </table>
+      </div>
+    </section>
+
+    <section class="grid-3" style="margin-top:18px;">
+      <article class="card kpi-card">
+        <h3>Open taken</h3>
+        <div class="kpi" id="openTasks">4</div>
+        <div class="muted">Nog een paar dingen vragen opvolging.</div>
+      </article>
+
+      <article class="card kpi-card">
+        <h3>Aandachtspunten</h3>
+        <div class="kpi">3</div>
+        <div class="muted">Mobiliteit, medicatie en gewicht.</div>
+      </article>
+
+      <article class="card kpi-card">
+        <h3>Advies vandaag</h3>
+        <div class="kpi">1</div>
+        <div class="muted">Vraag vandaag best een verpleegkundige check als klachten toenemen.</div>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    function shuffleTasks() {
+      document.getElementById('taskTable').innerHTML = `
+        <tr>
+          <th>Taak</th>
+          <th>Wie</th>
+          <th>Status</th>
+        </tr>
+        <tr>
+          <td>Medicatie ophalen</td>
+          <td>Tom</td>
+          <td><span class="status-pill pill-now">Vandaag 17:00</span></td>
+        </tr>
+        <tr>
+          <td>Boodschappen</td>
+          <td>Anne</td>
+          <td><span class="status-pill pill-later">Morgen</span></td>
+        </tr>
+        <tr>
+          <td>Oefeningen begeleiden</td>
+          <td>Sam</td>
+          <td><span class="status-pill pill-now">Vanavond</span></td>
+        </tr>
+        <tr>
+          <td>Telefooncheck</td>
+          <td>Els</td>
+          <td><span class="status-pill pill-now">Binnen 1 uur</span></td>
+        </tr>
+      `;
+
+      document.getElementById('burdenScore').textContent = '49 / 100';
+      document.getElementById('burdenFill').style.width = '49%';
+      document.getElementById('burdenText').textContent = 'De belasting zakt wanneer taken beter verdeeld zijn. Dat geeft meer ademruimte.';
+      document.getElementById('openTasks').textContent = '3';
+
+      document.getElementById('familyStatusTitle').textContent = 'De taakverdeling is nu evenwichtiger.';
+      document.getElementById('familyStatusText').textContent = 'De opvolging blijft belangrijk, maar de druk op één persoon neemt af.';
+      document.getElementById('familyStatusDot').style.background = 'var(--success)';
+      document.getElementById('familyStatusDot').style.boxShadow = '0 0 0 6px rgba(94, 127, 69, 0.12)';
+    }
+
+    document.getElementById('familyUpload').addEventListener('change', function (event) {
+      const files = Array.from(event.target.files);
+      const list = document.getElementById('familyFileList');
+
+      if (!files.length) return;
+
+      list.innerHTML = files.map(file => `
+        <div class="file-item">
+          <strong>${file.name}</strong><br>
+          <span class="muted">${Math.round(file.size / 1024)} KB</span>
+        </div>
+      `).join('');
+    });
+  </script>
+</body>
+</html>
