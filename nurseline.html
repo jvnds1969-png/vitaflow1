@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VitaFlow - Nurseline Werkblad</title>
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f4f6f8;
+      --surface: #ffffff;
+      --surface-soft: #f8fafc;
+      --surface-soft-2: #f1f5f9;
+      --text: #1f2937;
+      --muted: #667085;
+      --primary: #0f5ea8;
+      --primary-soft: #dce9f7;
+      --success: #1f7a3d;
+      --warning: #b26b00;
+      --danger: #b42318;
+      --border: #d9e1ea;
+      --shadow: 0 10px 24px rgba(16, 24, 40, 0.06);
+      --radius-xl: 20px;
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --font: 'Satoshi', Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      min-height: 100vh;
+    }
+
+    aside {
+      background: #0f172a;
+      color: white;
+      padding: 24px 18px;
+      border-right: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .brand h1 {
+      margin: 0 0 4px;
+      font-size: 1.5rem;
+    }
+
+    .brand p {
+      margin: 0 0 22px;
+      color: #b8c1d1;
+      font-size: 0.98rem;
+    }
+
+    .nav-group {
+      margin-top: 16px;
+    }
+
+    .nav-label {
+      color: #91a0b8;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin: 0 0 8px;
+    }
+
+    .nav-item {
+      padding: 12px 14px;
+      border-radius: 12px;
+      margin-bottom: 8px;
+      background: rgba(255,255,255,0.04);
+      color: #eef2ff;
+    }
+
+    .nav-item.active {
+      background: rgba(15, 94, 168, 0.28);
+      border: 1px solid rgba(147, 197, 253, 0.18);
+    }
+
+    main {
+      padding: 20px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .title h2 {
+      margin: 0;
+      font-size: clamp(1.5rem, 1.15rem + 1vw, 2rem);
+    }
+
+    .title p {
+      margin: 6px 0 0;
+      color: var(--muted);
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .button {
+      border: none;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-weight: 700;
+      min-height: 46px;
+    }
+
+    .button.primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .button.secondary {
+      background: white;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .alert-banner {
+      background: #fff8e8;
+      border: 1px solid #f3d59a;
+      color: #8a5a00;
+      padding: 14px 16px;
+      border-radius: 14px;
+      margin-bottom: 18px;
+    }
+
+    .grid-3, .grid-2 {
+      display: grid;
+      gap: 16px;
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .grid-2 {
+      grid-template-columns: 1.35fr 0.95fr;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 1.2rem;
+    }
+
+    .card p {
+      margin: 0 0 14px;
+      color: var(--muted);
+    }
+
+    .kpi {
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1.4fr repeat(4, minmax(120px, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .field, .select {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: white;
+      border-radius: 12px;
+      min-height: 44px;
+      padding: 10px 12px;
+      font: inherit;
+      color: var(--text);
+    }
+
+    .table-wrap {
+      margin-top: 14px;
+      overflow: auto;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: white;
+      max-height: 440px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1120px;
+      font-size: 0.95rem;
+    }
+
+    thead th {
+      position: sticky;
+      top: 0;
+      background: #f8fafc;
+      z-index: 1;
+    }
+
+    th, td {
+      padding: 12px 10px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    tr:hover td {
+      background: #fbfdff;
+    }
+
+    tr.active-row td {
+      background: #eef6ff;
+    }
+
+    .patient-btn {
+      border: none;
+      background: none;
+      padding: 0;
+      font: inherit;
+      font-weight: 700;
+      color: var(--primary);
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .badge-high { background: #fee4e2; color: var(--danger); }
+    .badge-medium { background: #fff4dc; color: var(--warning); }
+    .badge-low { background: #e8f5ea; color: var(--success); }
+    .badge-open { background: #dce9f7; color: var(--primary); }
+    .badge-done { background: #eaf7ef; color: var(--success); }
+
+    .patient-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .patient-header h3 {
+      margin-bottom: 4px;
+    }
+
+    .mini-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .mini-tag {
+      background: var(--surface-soft-2);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 8px 10px;
+      font-size: 0.88rem;
+    }
+
+    .section-box {
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      margin-top: 12px;
+    }
+
+    .section-box strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .followup-table {
+      width: 100%;
+      min-width: 0;
+      font-size: 0.94rem;
+    }
+
+    .followup-table th,
+    .followup-table td {
+      padding: 12px 8px;
+    }
+
+    .check-cell {
+      white-space: nowrap;
+    }
+
+    .check-action {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .log-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .log-item {
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px 14px;
+    }
+
+    .log-meta {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-top: 4px;
+    }
+
+    .footer-note {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 1180px) {
+      .grid-3 { grid-template-columns: 1fr; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .toolbar { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      aside { padding: 18px; }
+      main { padding: 14px; }
+    }
+
+    @media (max-width: 680px) {
+      .toolbar { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside>
+      <div class="brand">
+        <h1>Nurseline</h1>
+        <p>Operationeel werkblad voor grootschalige opvolging.</p>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-label">Werk</div>
+        <div class="nav-item active">Caseload</div>
+        <div class="nav-item">Open acties</div>
+        <div class="nav-item">Escalaties</div>
+        <div class="nav-item">Wachtrij vandaag</div>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-label">Registratie</div>
+        <div class="nav-item">Opvolglog</div>
+        <div class="nav-item">Contactpogingen</div>
+        <div class="nav-item">Taken per collega</div>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-label">Kwaliteit</div>
+        <div class="nav-item">Niet-afgesloten dossiers</div>
+        <div class="nav-item">Overdrachten</div>
+      </div>
+    </aside>
+
+    <main>
+      <div class="topbar">
+        <div class="title">
+          <h2>Caseload & opvolgwerkblad</h2>
+          <p>
+            Logisch, snel en overdraagbaar werkblad met afvinkbare acties, timestamps en duidelijke verantwoordelijkheid.
+          </p>
+        </div>
+
+        <div class="top-actions">
+          <button class="button secondary" onclick="markAllVisibleReviewed()">Markeer zichtbare patiënten als nagekeken</button>
+          <button class="button primary" onclick="simulateNextAction()">Simuleer actie</button>
+        </div>
+      </div>
+
+      <div class="alert-banner" id="globalBanner">
+        <strong>Vandaag:</strong> 184 patiënten vragen opvolging, 27 zijn hoogprioritair, 9 escalaties wachten op afronding.
+      </div>
+
+      <section class="grid-3">
+        <article class="card">
+          <h3>Open dossiers vandaag</h3>
+          <div class="kpi" id="kpiOpen">184</div>
+          <div class="muted">Te verdelen over team en shift.</div>
+        </article>
+
+        <article class="card">
+          <h3>Hoogprioritair</h3>
+          <div class="kpi" id="kpiHigh">27</div>
+          <div class="muted">Vandaag eerst op te nemen.</div>
+        </article>
+
+        <article class="card">
+          <h3>Afgerond deze shift</h3>
+          <div class="kpi" id="kpiDone">63</div>
+          <div class="muted">Met registratie en timestamp.</div>
+        </article>
+      </section>
+
+      <section class="card" style="margin-top:16px;">
+        <h3>Caseload-overzicht</h3>
+        <p>
+          Start altijd vanuit de volledige lijst. Zoek, filter en open daarna pas het detail van de patiënt.
+        </p>
+
+        <div class="toolbar">
+          <input class="field" id="searchInput" type="text" placeholder="Zoek op naam, dossiernummer, contactpersoon..." oninput="filterPatients()" />
+          <select class="select" id="priorityFilter" onchange="filterPatients()">
+            <option value="">Alle prioriteiten</option>
+            <option value="high">Hoog</option>
+            <option value="medium">Midden</option>
+            <option value="low">Laag</option>
+          </select>
+          <select class="select" id="statusFilter" onchange="filterPatients()">
+            <option value="">Alle statussen</option>
+            <option value="Te bekijken">Te bekijken</option>
+            <option value="In opvolging">In opvolging</option>
+            <option value="Wacht op callback">Wacht op callback</option>
+            <option value="Afgerond">Afgerond</option>
+          </select>
+          <select class="select" id="ownerFilter" onchange="filterPatients()">
+            <option value="">Alle collega's</option>
+            <option value="JV">JV</option>
+            <option value="LM">LM</option>
+            <option value="SD">SD</option>
+            <option value="Team">Team</option>
+          </select>
+          <select class="select" id="domainFilter" onchange="filterPatients()">
+            <option value="">Alle domeinen</option>
+            <option value="Hartfalen">Hartfalen</option>
+            <option value="Medicatie">Medicatie</option>
+            <option value="Mobiliteit">Mobiliteit</option>
+            <option value="Sociaal">Sociaal</option>
+          </select>
+        </div>
+
+        <div class="table-wrap">
+          <table id="caseloadTable">
+            <thead>
+              <tr>
+                <th>Patiënt</th>
+                <th>Dossier</th>
+                <th>Prioriteit</th>
+                <th>Hoofdsignaal</th>
+                <th>Laatste contact</th>
+                <th>Volgende actie</th>
+                <th>Status</th>
+                <th>Eigenaar</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="patient-row active-row" data-name="Marie De Smet" data-priority="high" data-status="Te bekijken" data-owner="JV" data-domain="Hartfalen" onclick="selectPatient('marie')">
+                <td><button class="patient-btn">Marie De Smet, 82 j</button></td>
+                <td>VF-2026-00128</td>
+                <td><span class="badge badge-high">Hoog</span></td>
+                <td>Gewicht +2,1 kg / 3 d</td>
+                <td>18u geleden</td>
+                <td>Videocall + medicatiecheck</td>
+                <td><span class="badge badge-open">Te bekijken</span></td>
+                <td>JV</td>
+              </tr>
+              <tr class="patient-row" data-name="Roger Peeters" data-priority="medium" data-status="In opvolging" data-owner="LM" data-domain="Mobiliteit" onclick="selectPatient('roger')">
+                <td><button class="patient-btn">Roger Peeters, 77 j</button></td>
+                <td>VF-2026-00402</td>
+                <td><span class="badge badge-medium">Midden</span></td>
+                <td>2 bijna-valincidenten</td>
+                <td>4u geleden</td>
+                <td>Familie bevragen</td>
+                <td><span class="badge badge-open">In opvolging</span></td>
+                <td>LM</td>
+              </tr>
+              <tr class="patient-row" data-name="Jeannine Verhulst" data-priority="low" data-status="Afgerond" data-owner="SD" data-domain="Medicatie" onclick="selectPatient('jeannine')">
+                <td><button class="patient-btn">Jeannine Verhulst, 74 j</button></td>
+                <td>VF-2026-00351</td>
+                <td><span class="badge badge-low">Laag</span></td>
+                <td>Herinnering medicatieschema</td>
+                <td>1u geleden</td>
+                <td>Geen</td>
+                <td><span class="badge badge-done">Afgerond</span></td>
+                <td>SD</td>
+              </tr>
+              <tr class="patient-row" data-name="Maurice Van Dam" data-priority="high" data-status="Wacht op callback" data-owner="Team" data-domain="Sociaal" onclick="selectPatient('maurice')">
+                <td><button class="patient-btn">Maurice Van Dam, 86 j</button></td>
+                <td>VF-2026-00518</td>
+                <td><span class="badge badge-high">Hoog</span></td>
+                <td>Mantelzorg overbelast</td>
+                <td>22u geleden</td>
+                <td>Dochter terugbellen</td>
+                <td><span class="badge badge-open">Wacht op callback</span></td>
+                <td>Team</td>
+              </tr>
+              <tr class="patient-row" data-name="Helena Jacobs" data-priority="medium" data-status="Te bekijken" data-owner="JV" data-domain="Medicatie" onclick="selectPatient('helena')">
+                <td><button class="patient-btn">Helena Jacobs, 80 j</button></td>
+                <td>VF-2026-00589</td>
+                <td><span class="badge badge-medium">Midden</span></td>
+                <td>2 gemiste innames</td>
+                <td>7u geleden</td>
+                <td>Medicatiebarrière nagaan</td>
+                <td><span class="badge badge-open">Te bekijken</span></td>
+                <td>JV</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="footer-note">
+          Dit scherm moet later technisch uitbreidbaar zijn met paging, virtual scrolling en bulkacties voor duizenden patiënten.
+        </div>
+      </section>
+
+      <section class="grid-2" style="margin-top:16px;">
+        <article class="card">
+          <div class="patient-header">
+            <div>
+              <h3 id="detailName">Marie De Smet, 82 jaar</h3>
+              <div class="muted" id="detailMeta">VF-2026-00128 · hoofdcontact Anne De Smet · huisarts Dr. Claes</div>
+              <div class="mini-tags">
+                <span class="mini-tag" id="detailPriority">Prioriteit: hoog</span>
+                <span class="mini-tag" id="detailOwner">Eigenaar: JV</span>
+                <span class="mini-tag" id="detailLastContact">Laatste contact: 18u geleden</span>
+              </div>
+            </div>
+            <div class="mini-tags">
+              <span class="mini-tag">Hartfalen</span>
+              <span class="mini-tag">Medicatie</span>
+              <span class="mini-tag">Valrisico</span>
+            </div>
+          </div>
+
+          <div class="section-box">
+            <strong>Korte klinische samenvatting</strong>
+            <div id="detailSummary">
+              Gewicht +2,1 kg in 3 dagen, 3 gemiste doses diuretica, kortademiger bij inspanning. Dochter Anne is hoofdcontact en bereikbaar.
+            </div>
+          </div>
+
+          <div class="section-box">
+            <strong>Context & aandachtspunten</strong>
+            <div id="detailContext">
+              Woont alleen. Vergeet soms avondmedicatie. Dochter helpt actief, maar voelt de belasting stijgen. Patiënt is ongerust om te vallen.
+            </div>
+          </div>
+
+          <div class="section-box">
+            <strong>Werkafspraken voor collega’s</strong>
+            <div id="detailInstructions">
+              Eerst patiënt bellen. Indien geen antwoord: dochter Anne contacteren. Bij extra dyspneu of oedeem huisarts verwittigen en registreren in log.
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Opvolgacties</h3>
+          <p>
+            Acties zijn afvinkbaar en registreren wie iets gedaan heeft en wanneer. Zo kan de volgende collega direct verder.
+          </p>
+
+          <div class="table-wrap" style="max-height:none;">
+            <table class="followup-table" id="actionTable">
+              <thead>
+                <tr>
+                  <th>Actie</th>
+                  <th>Status</th>
+                  <th>Uitgevoerd door</th>
+                  <th>Tijdstip</th>
+                  <th>Afvinken</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Patiënt telefonisch contacteren</td>
+                  <td id="status-a1">Open</td>
+                  <td id="owner-a1">—</td>
+                  <td id="time-a1">—</td>
+                  <td class="check-cell">
+                    <div class="check-action">
+                      <input type="checkbox" id="check-a1" onchange="toggleAction('a1', 'JV')" />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Dochter Anne contacteren</td>
+                  <td id="status-a2">Open</td>
+                  <td id="owner-a2">—</td>
+                  <td id="time-a2">—</td>
+                  <td class="check-cell">
+                    <div class="check-action">
+                      <input type="checkbox" id="check-a2" onchange="toggleAction('a2', 'JV')" />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Medicatiebarrière registreren</td>
+                  <td id="status-a3">Open</td>
+                  <td id="owner-a3">—</td>
+                  <td id="time-a3">—</td>
+                  <td class="check-cell">
+                    <div class="check-action">
+                      <input type="checkbox" id="check-a3" onchange="toggleAction('a3', 'JV')" />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Beslissen over escalatie huisarts</td>
+                  <td id="status-a4">Open</td>
+                  <td id="owner-a4">—</td>
+                  <td id="time-a4">—</td>
+                  <td class="check-cell">
+                    <div class="check-action">
+                      <input type="checkbox" id="check-a4" onchange="toggleAction('a4', 'JV')" />
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="footer-note">
+            In productie zou je hier ook actie-eigenaar, deadline, SLA en automatische audittrail voorzien.
+          </div>
+        </article>
+      </section>
+
+      <section class="card" style="margin-top:16px;">
+        <h3>Opvolglog / overdracht</h3>
+        <p>
+          Korte, leesbare log zodat collega’s exact zien wat al gebeurd is.
+        </p>
+
+        <div class="log-list" id="logList">
+          <div class="log-item">
+            <strong>Open dossier aangemaakt voor review</strong>
+            <div class="log-meta">Vandaag 08:12 · door LM</div>
+          </div>
+          <div class="log-item">
+            <strong>Automatisch signaal: gewichtstoename en gemiste diuretica</strong>
+            <div class="log-meta">Vandaag 08:14 · systeem</div>
+          </div>
+          <div class="log-item">
+            <strong>Dochter Anne aangeduid als eerste contactpersoon</strong>
+            <div class="log-meta">Gisteren 17:41 · door JV</div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const patientDetails = {
+      marie: {
+        name: "Marie De Smet, 82 jaar",
+        meta: "VF-2026-00128 · hoofdcontact Anne De Smet · huisarts Dr. Claes",
+        priority: "Prioriteit: hoog",
+        owner: "Eigenaar: JV",
+        lastContact: "Laatste contact: 18u geleden",
+        summary: "Gewicht +2,1 kg in 3 dagen, 3 gemiste doses diuretica, kortademiger bij inspanning. Dochter Anne is hoofdcontact en bereikbaar.",
+        context: "Woont alleen. Vergeet soms avondmedicatie. Dochter helpt actief, maar voelt de belasting stijgen. Patiënt is ongerust om te vallen.",
+        instructions: "Eerst patiënt bellen. Indien geen antwoord: dochter Anne contacteren. Bij extra dyspneu of oedeem huisarts verwittigen en registreren in log."
+      },
+      roger: {
+        name: "Roger Peeters, 77 jaar",
+        meta: "VF-2026-00402 · hoofdcontact Els Peeters · huisarts Dr. Van Looy",
+        priority: "Prioriteit: midden",
+        owner: "Eigenaar: LM",
+        lastContact: "Laatste contact: 4u geleden",
+        summary: "Twee bijna-valincidenten deze week. Geen letsels, maar onzeker stappen in huis en meer angst om te bewegen.",
+        context: "Woont met partner. Dochter helpt niet dagelijks. Trap in woning aanwezig.",
+        instructions: "Valcontext uitvragen, familie bevragen naar recente incidenten en nood aan extra ondersteuning nagaan."
+      },
+      jeannine: {
+        name: "Jeannine Verhulst, 74 jaar",
+        meta: "VF-2026-00351 · hoofdcontact zoon Marc · huisarts Dr. Willems",
+        priority: "Prioriteit: laag",
+        owner: "Eigenaar: SD",
+        lastContact: "Laatste contact: 1u geleden",
+        summary: "Herinnering medicatieschema gegeven. Geen alarmsignalen vandaag.",
+        context: "Goed netwerk. Woont zelfstandig. Zeer therapietrouw mits herinnering.",
+        instructions: "Geen verdere actie nodig tenzij nieuwe melding binnenkomt."
+      },
+      maurice: {
+        name: "Maurice Van Dam, 86 jaar",
+        meta: "VF-2026-00518 · hoofdcontact dochter Hilde · huisarts Dr. Smets",
+        priority: "Prioriteit: hoog",
+        owner: "Eigenaar: Team",
+        lastContact: "Laatste contact: 22u geleden",
+        summary: "Familiebelasting stijgt, mantelzorger vraagt ondersteuning en duidelijkere taakverdeling.",
+        context: "Complexe thuissituatie. Dochter combineert zorg met werk. Buur helpt sporadisch.",
+        instructions: "Dochter terugbellen, draagkracht inschatten en nagaan of extra thuiszorg of nurseline-opvolging nodig is."
+      },
+      helena: {
+        name: "Helena Jacobs, 80 jaar",
+        meta: "VF-2026-00589 · hoofdcontact Peter Jacobs · huisarts Dr. Aerts",
+        priority: "Prioriteit: midden",
+        owner: "Eigenaar: JV",
+        lastContact: "Laatste contact: 7u geleden",
+        summary: "Twee gemiste innames. Nog onduidelijk of dit vergeetachtigheid of praktische barrière is.",
+        context: "Woont alleen. Zoon op afstand. Middelmatige therapietrouw.",
+        instructions: "Medicatiebarrière in kaart brengen en beslissen of extra herinneringssysteem nodig is."
+      }
+    };
+
+    function selectPatient(key) {
+      const detail = patientDetails[key];
+      if (!detail) return;
+
+      document.querySelectorAll('.patient-row').forEach(row => row.classList.remove('active-row'));
+      event.currentTarget.classList.add('active-row');
+
+      document.getElementById('detailName').textContent = detail.name;
+      document.getElementById('detailMeta').textContent = detail.meta;
+      document.getElementById('detailPriority').textContent = detail.priority;
+      document.getElementById('detailOwner').textContent = detail.owner;
+      document.getElementById('detailLastContact').textContent = detail.lastContact;
+      document.getElementById('detailSummary').textContent = detail.summary;
+      document.getElementById('detailContext').textContent = detail.context;
+      document.getElementById('detailInstructions').textContent = detail.instructions;
+
+      resetActionTable();
+      addLog(`Patiëntdetail geopend: ${detail.name}`, "nu · door gebruiker");
+    }
+
+    function toggleAction(actionId, initials) {
+      const checkbox = document.getElementById(`check-${actionId}`);
+      const status = document.getElementById(`status-${actionId}`);
+      const owner = document.getElementById(`owner-${actionId}`);
+      const time = document.getElementById(`time-${actionId}`);
+      const timestamp = new Date().toLocaleString('nl-BE', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+
+      if (checkbox.checked) {
+        status.textContent = "Afgevinkt";
+        owner.textContent = initials;
+        time.textContent = timestamp;
+        addLog(`Actie afgewerkt: ${status.closest('tr').children[0].textContent}`, `${timestamp} · door ${initials}`);
+      } else {
+        status.textContent = "Open";
+        owner.textContent = "—";
+        time.textContent = "—";
+        addLog(`Actie terug opengezet: ${status.closest('tr').children[0].textContent}`, `nu · door ${initials}`);
+      }
+    }
+
+    function addLog(message, meta) {
+      const logList = document.getElementById('logList');
+      const item = document.createElement('div');
+      item.className = 'log-item';
+      item.innerHTML = `<strong>${message}</strong><div class="log-meta">${meta}</div>`;
+      logList.prepend(item);
+    }
+
+    function resetActionTable() {
+      ['a1', 'a2', 'a3', 'a4'].forEach(id => {
+        document.getElementById(`check-${id}`).checked = false;
+        document.getElementById(`status-${id}`).textContent = 'Open';
+        document.getElementById(`owner-${id}`).textContent = '—';
+        document.getElementById(`time-${id}`).textContent = '—';
+      });
+    }
+
+    function filterPatients() {
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const priority = document.getElementById('priorityFilter').value;
+      const status = document.getElementById('statusFilter').value;
+      const owner = document.getElementById('ownerFilter').value;
+      const domain = document.getElementById('domainFilter').value;
+
+      document.querySelectorAll('.patient-row').forEach(row => {
+        const matchesSearch = row.dataset.name.toLowerCase().includes(search) || row.children[1].textContent.toLowerCase().includes(search);
+        const matchesPriority = !priority || row.dataset.priority === priority;
+        const matchesStatus = !status || row.dataset.status === status;
+        const matchesOwner = !owner || row.dataset.owner === owner;
+        const matchesDomain = !domain || row.dataset.domain === domain;
+
+        row.style.display = (matchesSearch && matchesPriority && matchesStatus && matchesOwner && matchesDomain) ? '' : 'none';
+      });
+    }
+
+    function simulateNextAction() {
+      document.getElementById('globalBanner').innerHTML = '<strong>Update:</strong> 1 hoogprioritair dossier toegewezen, 1 contactpoging geregistreerd en opvolglog automatisch aangevuld.';
+      document.getElementById('kpiOpen').textContent = '183';
+      document.getElementById('kpiDone').textContent = '64';
+      addLog('Contactpoging patiënt geregistreerd, geen antwoord', 'nu · door JV');
+    }
+
+    function markAllVisibleReviewed() {
+      let count = 0;
+      document.querySelectorAll('.patient-row').forEach(row => {
+        if (row.style.display !== 'none') {
+          row.cells[6].innerHTML = '<span class="badge badge-done">Afgerond</span>';
+          count++;
+        }
+      });
+      addLog(`${count} zichtbare dossiers gemarkeerd als nagekeken`, 'nu · bulkactie');
+    }
+  </script>
+</body>
+</html>
