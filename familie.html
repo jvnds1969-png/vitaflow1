@@ -1,755 +1,551 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="nl" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VitaFlow - Familie</title>
+  <title>VitaFlow Mantelzorger</title>
   <link rel="preconnect" href="https://api.fontshare.com">
   <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #f6f3ee;
-      --surface: #ffffff;
-      --surface-soft: #f4efe8;
-      --surface-warm: #fcf8f2;
-      --text: #2d2a24;
-      --muted: #726d65;
-      --primary: #246a73;
+      --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+      --text-sm: clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
+      --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+      --text-lg: clamp(1.125rem, 1rem + 0.75vw, 1.5rem);
+      --text-xl: clamp(1.5rem, 1.2rem + 1.25vw, 2rem);
+      --space-2: 0.5rem;
+      --space-3: 0.75rem;
+      --space-4: 1rem;
+      --space-5: 1.25rem;
+      --space-6: 1.5rem;
+      --space-8: 2rem;
+      --radius-md: 0.875rem;
+      --radius-lg: 1.25rem;
+      --radius-xl: 1.5rem;
+      --radius-full: 999px;
+      --shadow-sm: 0 2px 10px rgba(37, 33, 25, 0.06);
+      --shadow-md: 0 12px 28px rgba(37, 33, 25, 0.08);
+      --font-body: 'Satoshi', Arial, sans-serif;
+      --transition: 180ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    :root, [data-theme="light"] {
+      --bg: #f7f4ef;
+      --surface: #fffdf9;
+      --surface-2: #f3eee6;
+      --text: #28251d;
+      --muted: #6f685f;
+      --border: rgba(40, 37, 29, 0.12);
+      --primary: #1f6d73;
+      --primary-strong: #155158;
       --primary-soft: #dceced;
-      --secondary: #7f5aa2;
-      --secondary-soft: #efe7f8;
-      --success: #5e7f45;
-      --warning: #b9772f;
-      --danger: #b44c58;
-      --border: #ddd5ca;
-      --shadow: 0 10px 24px rgba(56, 43, 26, 0.06);
-      --radius-xl: 24px;
-      --radius-lg: 18px;
-      --radius-md: 14px;
-      --font: 'Satoshi', Arial, sans-serif;
+      --success: #4d7a2c;
+      --success-soft: #e8f0df;
+      --warning: #a06420;
+      --warning-soft: #f6ecdf;
     }
 
-    * {
-      box-sizing: border-box;
+    [data-theme="dark"] {
+      --bg: #171614;
+      --surface: #1d1c1a;
+      --surface-2: #252320;
+      --text: #f2eee7;
+      --muted: #b7b0a7;
+      --border: rgba(242, 238, 231, 0.12);
+      --primary: #68aab0;
+      --primary-strong: #8cc4c9;
+      --primary-soft: #243436;
+      --success: #87b45e;
+      --success-soft: #283323;
+      --warning: #d39d57;
+      --warning-soft: #3a3022;
+      --shadow-sm: 0 2px 10px rgba(0,0,0,0.25);
+      --shadow-md: 0 14px 32px rgba(0,0,0,0.3);
     }
 
+    * , *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
       margin: 0;
-      font-family: var(--font);
-      background:
-        radial-gradient(circle at top left, #fbf7f1 0%, #f6f3ee 45%),
-        var(--bg);
-      color: var(--text);
+      min-height: 100dvh;
+      font-family: var(--font-body);
+      font-size: var(--text-base);
       line-height: 1.5;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
+    button, textarea, a { font: inherit; }
+    button { cursor: pointer; border: 0; }
+    a { color: inherit; }
+    :focus-visible {
+      outline: 3px solid var(--primary);
+      outline-offset: 3px;
+      border-radius: 12px;
     }
 
     .app {
-      max-width: 1080px;
+      width: min(100%, 780px);
       margin: 0 auto;
-      padding: 24px;
+      padding: var(--space-4);
+      padding-bottom: 6rem;
     }
 
     .topbar {
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
-      gap: 20px;
-      margin-bottom: 24px;
+      align-items: center;
+      gap: var(--space-4);
+      margin-bottom: var(--space-5);
     }
 
-    .brand-eyebrow {
-      font-size: 0.95rem;
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .logo {
+      width: 50px;
+      height: 50px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
       color: var(--primary);
-      font-weight: 700;
-      margin-bottom: 6px;
-      letter-spacing: 0.02em;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      flex-shrink: 0;
     }
 
-    .title h1 {
+    .brand h1 {
       margin: 0;
-      font-size: clamp(2rem, 1.5rem + 1vw, 2.7rem);
+      font-size: var(--text-lg);
       line-height: 1.1;
     }
 
-    .title p {
-      margin: 10px 0 0;
+    .brand p {
+      margin: 0.15rem 0 0;
       color: var(--muted);
-      max-width: 700px;
-      font-size: 1.05rem;
+      font-size: var(--text-sm);
     }
 
-    .actions {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    button {
-      font: inherit;
-    }
-
-    .button {
-      border: none;
-      border-radius: 16px;
-      padding: 15px 20px;
-      min-height: 52px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
-
-    .button.primary {
-      background: var(--primary);
-      color: white;
-      box-shadow: 0 6px 16px rgba(36, 106, 115, 0.18);
-    }
-
-    .button.secondary {
+    .theme-toggle {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
       background: var(--surface);
-      color: var(--text);
       border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      color: var(--text);
     }
 
-    .button:hover {
-      transform: translateY(-1px);
-    }
-
-    .hero,
-    .card {
+    .panel {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius-xl);
-      box-shadow: var(--shadow);
+      box-shadow: var(--shadow-sm);
     }
 
     .hero {
-      padding: 28px;
-      background: linear-gradient(180deg, #fffdf9 0%, #ffffff 100%);
-      margin-bottom: 18px;
+      padding: var(--space-6);
+      margin-bottom: var(--space-5);
+      display: grid;
+      gap: var(--space-4);
     }
 
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      gap: 22px;
-      align-items: start;
+    .eyebrow {
+      display: inline-flex;
+      width: fit-content;
+      padding: 0.45rem 0.8rem;
+      border-radius: var(--radius-full);
+      background: var(--primary-soft);
+      color: var(--primary-strong);
+      font-size: var(--text-sm);
+      font-weight: 700;
     }
 
     .hero h2 {
-      margin: 0 0 10px;
-      font-size: clamp(1.6rem, 1.2rem + 1vw, 2rem);
-      line-height: 1.15;
+      margin: 0.2rem 0 0;
+      font-size: var(--text-xl);
+      line-height: 1.1;
     }
 
     .hero p {
       margin: 0;
       color: var(--muted);
-      font-size: 1.05rem;
+      max-width: 40ch;
     }
 
     .status-box {
-      margin-top: 18px;
+      display: grid;
+      gap: var(--space-3);
+      padding: var(--space-4);
+      border-radius: var(--radius-lg);
+      background: var(--success-soft);
+      border: 1px solid rgba(77,122,44,0.14);
+    }
+
+    .status-box.warning {
+      background: var(--warning-soft);
+      border-color: rgba(160,100,32,0.16);
+    }
+
+    .status-line {
       display: flex;
-      gap: 14px;
-      align-items: flex-start;
-      background: var(--surface-soft);
-      padding: 16px 18px;
-      border-radius: 18px;
+      align-items: center;
+      gap: var(--space-3);
     }
 
     .status-dot {
-      width: 16px;
-      height: 16px;
-      min-width: 16px;
+      width: 14px;
+      height: 14px;
       border-radius: 50%;
-      margin-top: 4px;
+      background: var(--success);
+      box-shadow: 0 0 0 6px rgba(77,122,44,0.14);
+      flex-shrink: 0;
+    }
+
+    .warning .status-dot {
       background: var(--warning);
-      box-shadow: 0 0 0 6px rgba(185, 119, 47, 0.12);
+      box-shadow: 0 0 0 6px rgba(160,100,32,0.14);
     }
 
     .status-box strong {
       display: block;
-      margin-bottom: 4px;
-      font-size: 1.05rem;
-    }
-
-    .focus-box {
-      background: var(--surface-warm);
-      border: 1px solid #eadfce;
-      border-radius: 18px;
-      padding: 18px;
-    }
-
-    .focus-label {
-      font-size: 0.95rem;
-      color: var(--primary);
-      font-weight: 700;
-      margin-bottom: 6px;
-    }
-
-    .focus-box strong {
-      display: block;
-      font-size: 1.2rem;
-      margin-bottom: 6px;
-    }
-
-    .muted {
-      color: var(--muted);
-    }
-
-    .chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 14px;
-    }
-
-    .chip {
-      background: var(--surface-soft);
-      border: 1px solid #e5ddd2;
-      padding: 10px 14px;
-      border-radius: 999px;
-      font-size: 0.95rem;
-    }
-
-    .grid-2,
-    .grid-3 {
-      display: grid;
-      gap: 18px;
-    }
-
-    .grid-2 {
-      grid-template-columns: 1fr 1fr;
-    }
-
-    .grid-3 {
-      grid-template-columns: repeat(3, 1fr);
-    }
-
-    .card {
-      padding: 22px;
-    }
-
-    .card h3 {
-      margin: 0 0 8px;
-      font-size: 1.35rem;
+      font-size: var(--text-lg);
       line-height: 1.2;
     }
 
-    .card p {
-      margin: 0 0 14px;
+    .status-box span {
       color: var(--muted);
     }
 
-    .task,
-    .signal,
-    .upload-box,
-    .support-box,
-    .burden-box {
-      background: var(--surface-soft);
+    .section {
+      margin-bottom: var(--space-5);
+    }
+
+    .section h3 {
+      margin: 0 0 var(--space-2);
+      font-size: var(--text-lg);
+    }
+
+    .section p.lead {
+      margin: 0 0 var(--space-3);
+      color: var(--muted);
+      font-size: var(--text-sm);
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-4);
+    }
+
+    .card {
+      padding: var(--space-4);
+    }
+
+    .mini-list {
+      display: grid;
+      gap: var(--space-3);
+    }
+
+    .mini-item {
+      padding: var(--space-3) var(--space-4);
+      background: var(--surface-2);
+      border: 1px solid var(--border);
       border-radius: 16px;
-      padding: 14px;
-      margin-top: 12px;
     }
 
-    .task strong,
-    .signal strong,
-    .support-box strong {
+    .mini-item strong {
       display: block;
-      margin-bottom: 4px;
-      font-size: 1.02rem;
+      margin-bottom: 0.15rem;
     }
 
-    .task-list,
-    .signal-list {
+    .mini-item span {
+      color: var(--muted);
+      font-size: var(--text-sm);
+    }
+
+    .actions {
       display: grid;
-      gap: 12px;
-      margin-top: 14px;
+      gap: var(--space-3);
     }
 
-    .task {
-      display: flex;
-      gap: 14px;
-      align-items: flex-start;
-    }
-
-    .task-icon,
-    .signal-icon {
-      width: 36px;
-      height: 36px;
-      min-width: 36px;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      background: #fff;
-      border: 1px solid var(--border);
-      font-weight: 700;
-      color: var(--primary);
-    }
-
-    .signal {
-      display: flex;
-      gap: 14px;
-      align-items: flex-start;
-    }
-
-    .signal-icon {
-      color: var(--secondary);
-    }
-
-    .upload-box input {
-      width: 100%;
-      margin-top: 12px;
-      font: inherit;
-    }
-
-    .file-list {
-      margin-top: 12px;
-      display: grid;
-      gap: 10px;
-    }
-
-    .file-item {
-      padding: 12px 14px;
-      border-radius: 14px;
-      background: #fff;
-      border: 1px solid var(--border);
-      font-size: 0.96rem;
-    }
-
-    .burden-box {
-      background: #faf5ff;
-      border: 1px solid #e6d8f2;
-    }
-
-    .burden {
-      height: 18px;
-      background: #eadff4;
-      border-radius: 999px;
-      overflow: hidden;
-      margin: 14px 0 10px;
-    }
-
-    .burden > span {
-      display: block;
-      height: 100%;
-      width: 58%;
-      background: var(--secondary);
-      transition: width 0.2s ease;
-    }
-
-    .kpi {
-      font-size: 2rem;
-      font-weight: 700;
-      line-height: 1;
-      margin-bottom: 8px;
-    }
-
-    .table-wrap {
-      overflow-x: auto;
-      margin-top: 14px;
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      background: #fff;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 620px;
-    }
-
-    th,
-    td {
-      padding: 14px 14px;
+    .action-button {
+      min-height: 60px;
+      border-radius: var(--radius-lg);
       text-align: left;
-      border-bottom: 1px solid var(--border);
-      vertical-align: top;
-    }
-
-    th {
-      color: var(--muted);
+      padding: 0.95rem 1rem;
+      background: var(--primary);
+      color: white;
       font-weight: 700;
-      background: #fcfbf8;
     }
 
-    tr:last-child td {
-      border-bottom: none;
+    .action-button.secondary {
+      background: var(--surface-2);
+      color: var(--text);
+      border: 1px solid var(--border);
     }
 
-    .status-pill {
-      display: inline-block;
-      padding: 8px 12px;
-      border-radius: 999px;
-      font-size: 0.92rem;
-      font-weight: 700;
-      background: var(--surface-soft);
-      border: 1px solid #e5ddd2;
+    .ask-box {
+      padding: var(--space-4);
+      border-radius: var(--radius-lg);
+      background: var(--surface-2);
+      border: 1px solid var(--border);
     }
 
-    .pill-ok {
-      background: #eef6e8;
-      border-color: #d6e7c8;
-      color: #45662f;
-    }
-
-    .pill-now {
-      background: #fff3ea;
-      border-color: #efd8c8;
-      color: #8d4a19;
-    }
-
-    .pill-later {
-      background: #ece8ff;
-      border-color: #d8cff6;
-      color: #64458b;
-    }
-
-    .kpi-card h3 {
-      margin-bottom: 10px;
-    }
-
-    .gentle-note {
-      margin-top: 16px;
-      padding: 16px;
+    textarea {
+      width: 100%;
+      min-height: 120px;
+      resize: vertical;
+      margin-top: var(--space-3);
+      padding: 1rem;
       border-radius: 16px;
-      background: #fff8ee;
-      border: 1px solid #f0dec3;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
     }
 
-    .gentle-note strong {
-      display: block;
-      margin-bottom: 4px;
+    .row {
+      display: flex;
+      gap: var(--space-3);
+      margin-top: var(--space-3);
+      flex-wrap: wrap;
     }
 
-    @media (max-width: 920px) {
-      .hero-grid,
-      .grid-2,
-      .grid-3 {
+    .small-button {
+      min-height: 48px;
+      padding: 0.75rem 1rem;
+      border-radius: 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      font-weight: 700;
+    }
+
+    .small-button.primary {
+      background: var(--primary);
+      color: white;
+      border-color: transparent;
+    }
+
+    .message {
+      margin-top: var(--space-3);
+      color: var(--muted);
+      font-size: var(--text-sm);
+    }
+
+    .sticky-bar {
+      position: fixed;
+      left: 50%;
+      bottom: 1rem;
+      transform: translateX(-50%);
+      width: min(calc(100% - 1rem), 780px);
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.6rem;
+      padding: 0.6rem;
+      border-radius: 20px;
+      background: color-mix(in srgb, var(--surface) 88%, transparent);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-md);
+      backdrop-filter: blur(14px);
+    }
+
+    .sticky-bar button {
+      min-height: 54px;
+      border-radius: 16px;
+      font-weight: 700;
+      background: var(--surface-2);
+      color: var(--text);
+    }
+
+    .sticky-bar button.primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    @media (max-width: 760px) {
+      .cards,
+      .sticky-bar {
         grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 680px) {
-      .app {
-        padding: 16px;
-      }
-
-      .topbar {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .actions {
-        width: 100%;
-      }
-
-      .actions .button {
-        width: 100%;
       }
 
       .hero,
       .card {
-        padding: 18px;
-        border-radius: 20px;
+        padding: var(--space-4);
       }
 
-      .title h1 {
-        font-size: 2rem;
+      .topbar {
+        align-items: flex-start;
       }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      * { transition: none !important; }
     }
   </style>
 </head>
 <body>
   <main class="app">
     <header class="topbar">
-      <div class="title">
-        <div class="brand-eyebrow">VitaFlow</div>
-        <h1>Familie & mantelzorger</h1>
-        <p>
-          Een eenvoudige, warme overzichtsapp voor wie mee ondersteunt:
-          wat vraagt vandaag aandacht, wie doet wat en wanneer is extra hulp slim.
-        </p>
+      <div class="brand">
+        <div class="logo" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 16C6 10.477 10.477 6 16 6H22V12C22 17.523 17.523 22 12 22H6V16Z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
+            <path d="M9 19L19 9" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div>
+          <h1>VitaFlow</h1>
+          <p>Mantelzorger overzicht</p>
+        </div>
       </div>
 
-      <div class="actions">
-        <button class="button secondary" onclick="alert('Hier kan later rechtstreeks contact met verpleegkundige of Nurseline komen.')">
-          Verpleegkundige contacteren
-        </button>
-        <button class="button primary" onclick="shuffleTasks()">
-          Taken beter verdelen
-        </button>
-      </div>
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="Verander thema">
+        <span aria-hidden="true">☾</span>
+      </button>
     </header>
 
-    <section class="hero">
-      <div class="hero-grid">
-        <div>
-          <h2>Wat is vandaag echt belangrijk?</h2>
-          <p>
-            Deze omgeving toont bewust alleen de zaken die je als familie nodig hebt:
-            een paar aandachtspunten, een haalbare taakverdeling en een duidelijk moment om hulp in te schakelen.
-          </p>
+    <section class="panel hero">
+      <div class="eyebrow">Vandaag</div>
+      <div>
+        <h2>Met Marie gaat het op dit moment rustig.</h2>
+        <p>Je ziet hier alleen wat jij echt moet weten: of alles stabiel is, wat nog openstaat en hoe je de verpleegkundige op afstand kan bereiken.</p>
+      </div>
 
-          <div class="status-box">
-            <span class="status-dot" id="familyStatusDot"></span>
-            <div>
-              <strong id="familyStatusTitle">Er is lichte extra aandacht nodig.</strong>
-              <span class="muted" id="familyStatusText">
-                Medicatie, duizeligheid en gewicht verdienen vandaag wat extra opvolging, maar het blijft beheersbaar.
-              </span>
-            </div>
+      <div class="status-box" id="statusBox">
+        <div class="status-line">
+          <span class="status-dot" aria-hidden="true"></span>
+          <div>
+            <strong id="statusTitle">Geen alarmsignalen op dit moment.</strong>
+            <span id="statusText">Medicatie is deels genomen, er zijn nog 2 rustige taken open en er is geen dringende interventie nodig.</span>
           </div>
         </div>
-
-        <aside class="focus-box">
-          <div class="focus-label">Vandaag de kern</div>
-          <strong>Niet alles hoeft door één persoon gedragen te worden.</strong>
-          <div class="muted">
-            Verdeel kleine taken slim over meerdere mensen. Dat geeft rust voor iedereen.
-          </div>
-
-          <div class="chips">
-            <span class="chip">Kleine acties</span>
-            <span class="chip">Samen opvolgen</span>
-            <span class="chip">Hulp tijdig inschakelen</span>
-          </div>
-        </aside>
       </div>
     </section>
 
-    <section class="grid-2">
-      <article class="card">
-        <h3>Wat vandaag te doen is</h3>
-        <p>
-          Concrete, haalbare acties. Geen lange lijst, wel wat nu echt telt.
-        </p>
+    <section class="section">
+      <h3>Wat jij moet weten</h3>
+      <p class="lead">Kort en geruststellend overzicht.</p>
 
-        <div class="task-list">
-          <div class="task">
-            <div class="task-icon">1</div>
-            <div>
-              <strong>Medicatie even checken</strong>
-              <div class="muted">Marie miste gisteren haar avondmedicatie.</div>
+      <div class="cards">
+        <article class="panel card">
+          <div class="mini-list">
+            <div class="mini-item">
+              <strong>Status vandaag</strong>
+              <span>Rustig verloop, geen acute melding.</span>
+            </div>
+            <div class="mini-item">
+              <strong>Nog open</strong>
+              <span>Wegen en avondmedicatie.</span>
+            </div>
+            <div class="mini-item">
+              <strong>Bezoek</strong>
+              <span>Anne gaat langs om 15:00.</span>
             </div>
           </div>
+        </article>
 
-          <div class="task">
-            <div class="task-icon">2</div>
-            <div>
-              <strong>Na de lunch kort bellen</strong>
-              <div class="muted">Vraag rustig of ze zich duizelig of kortademig voelt.</div>
-            </div>
+        <article class="panel card">
+          <div class="actions">
+            <button class="action-button" type="button" onclick="alert('Hier kan een videocall of chat met de verpleegkundige starten.')">Praat met de verpleegkundige</button>
+            <button class="action-button secondary" type="button" onclick="setConcern()">Ik maak me toch zorgen</button>
           </div>
-
-          <div class="task">
-            <div class="task-icon">3</div>
-            <div>
-              <strong>Woningcheck inplannen</strong>
-              <div class="muted">Het losse tapijt in de gang best laten wegnemen.</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="gentle-note">
-          <strong>Belangrijk om te onthouden</strong>
-          <span class="muted">
-            Familie hoeft niet alles zelf op te lossen. VitaFlow helpt signaleren wanneer professionele steun nuttig wordt.
-          </span>
-        </div>
-      </article>
-
-      <article class="card">
-        <h3>Wat VitaFlow vandaag opmerkt</h3>
-        <p>
-          Geen medische overload, wel een paar begrijpelijke signalen die helpen om vooruit te kijken.
-        </p>
-
-        <div class="signal-list">
-          <div class="signal">
-            <div class="signal-icon">•</div>
-            <div>
-              <strong>Valrisico stijgt licht</strong>
-              <div class="muted">De loopsnelheid in huis daalde deze week een beetje.</div>
-            </div>
-          </div>
-
-          <div class="signal">
-            <div class="signal-icon">•</div>
-            <div>
-              <strong>Gewicht vraagt aandacht</strong>
-              <div class="muted">De komende dagen even mee opvolgen is verstandig.</div>
-            </div>
-          </div>
-
-          <div class="signal">
-            <div class="signal-icon">•</div>
-            <div>
-              <strong>Verpleegkundige kan meevolgen</strong>
-              <div class="muted">Bij extra klachten kan de Nurseline eenvoudig aansluiten.</div>
-            </div>
-          </div>
-        </div>
-      </article>
-    </section>
-
-    <section class="grid-2" style="margin-top:18px;">
-      <article class="card">
-        <h3>Documenten toevoegen</h3>
-        <p>
-          Handig voor familie én zorgteam: medische info, planning, thuiszorgnotities of een foto van medicatie.
-        </p>
-
-        <div class="upload-box">
-          <strong>Kies bestanden</strong>
-          <div class="muted">
-            Bijvoorbeeld een ontslagbrief, medicatielijst, sociale documenten of praktische afspraken.
-          </div>
-          <input type="file" id="familyUpload" multiple />
-          <div class="file-list" id="familyFileList">
-            <div class="file-item">Nog geen nieuwe documenten toegevoegd.</div>
-          </div>
-        </div>
-      </article>
-
-      <article class="card">
-        <h3>Jouw draagkracht</h3>
-        <p>
-          Ook mantelzorg verdient opvolging. Deze check helpt om overbelasting sneller te zien.
-        </p>
-
-        <div class="burden-box">
-          <strong>Hoe zwaar voelt het nu?</strong>
-          <div class="burden">
-            <span id="burdenFill"></span>
-          </div>
-          <div class="kpi" id="burdenScore">58 / 100</div>
-          <div class="muted" id="burdenText">
-            Licht verhoogde belasting. Het is slim om taken te spreiden of hulp te laten aansluiten.
-          </div>
-        </div>
-
-        <div class="support-box">
-          <strong>Goede zorg is ook vol te houden zorg.</strong>
-          <div class="muted">
-            Een evenwichtige taakverdeling voorkomt dat één persoon alles moet dragen.
-          </div>
-        </div>
-      </article>
-    </section>
-
-    <section class="card" style="margin-top:18px;">
-      <h3>Wie doet wat?</h3>
-      <p>
-        Een rustige familiecockpit met duidelijke afspraken. Zo vermijd je misverstanden en dubbele inspanningen.
-      </p>
-
-      <div class="table-wrap">
-        <table id="taskTable">
-          <tr>
-            <th>Taak</th>
-            <th>Wie</th>
-            <th>Status</th>
-          </tr>
-          <tr>
-            <td>Medicatie ophalen</td>
-            <td>Anne</td>
-            <td><span class="status-pill pill-later">Gepland voor morgen</span></td>
-          </tr>
-          <tr>
-            <td>Boodschappen</td>
-            <td>Els</td>
-            <td><span class="status-pill pill-ok">Klaar</span></td>
-          </tr>
-          <tr>
-            <td>Oefeningen begeleiden</td>
-            <td>Sam</td>
-            <td><span class="status-pill pill-later">2x deze week</span></td>
-          </tr>
-          <tr>
-            <td>Telefooncheck</td>
-            <td>Tom</td>
-            <td><span class="status-pill pill-now">Vanavond</span></td>
-          </tr>
-        </table>
+        </article>
       </div>
     </section>
 
-    <section class="grid-3" style="margin-top:18px;">
-      <article class="card kpi-card">
-        <h3>Open taken</h3>
-        <div class="kpi" id="openTasks">4</div>
-        <div class="muted">Nog een paar dingen vragen opvolging.</div>
-      </article>
+    <section class="section">
+      <h3>Vraag op afstand</h3>
+      <p class="lead">Stel één korte vraag. De verpleegkundige kan antwoorden via chat of videocall.</p>
 
-      <article class="card kpi-card">
-        <h3>Aandachtspunten</h3>
-        <div class="kpi">3</div>
-        <div class="muted">Mobiliteit, medicatie en gewicht.</div>
-      </article>
+      <div class="panel card ask-box">
+        <label for="questionBox"><strong>Jouw vraag</strong></label>
+        <textarea id="questionBox" placeholder="Bijvoorbeeld: Marie is vandaag wat vermoeider. Is dat iets om op te volgen?"></textarea>
 
-      <article class="card kpi-card">
-        <h3>Advies vandaag</h3>
-        <div class="kpi">1</div>
-        <div class="muted">Vraag vandaag best een verpleegkundige check als klachten toenemen.</div>
-      </article>
+        <div class="row">
+          <button class="small-button primary" type="button" onclick="sendQuestion()">Verstuur vraag</button>
+          <button class="small-button" type="button" onclick="alert('Hier kan een rechtstreekse videocall starten.')">Start videocall</button>
+        </div>
+
+        <div class="message" id="questionFeedback">Nog geen vraag verstuurd.</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h3>Geruststellende afspraken</h3>
+      <p class="lead">Duidelijk wanneer jij wel of niet moet ingrijpen.</p>
+
+      <div class="cards">
+        <article class="panel card">
+          <div class="mini-list">
+            <div class="mini-item">
+              <strong>Je hoeft nu niets te doen</strong>
+              <span>Zolang er geen nieuwe melding komt, volstaat opvolgen op afstand.</span>
+            </div>
+            <div class="mini-item">
+              <strong>Wél actie nemen bij</strong>
+              <span>Meer kortademigheid, duizeligheid, opvallende verwardheid of snelle gewichtstoename.</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel card">
+          <div class="mini-list">
+            <div class="mini-item">
+              <strong>Snelle lijn</strong>
+              <span>Verpleegkundige bereikbaar voor korte vragen.</span>
+            </div>
+            <div class="mini-item">
+              <strong>Contact familie</strong>
+              <span>Deel gerust dezelfde update met broer of zus.</span>
+            </div>
+          </div>
+        </article>
+      </div>
     </section>
   </main>
 
+  <div class="sticky-bar" aria-label="Snelle acties">
+    <button class="primary" type="button" onclick="alert('Open chat of videocall met verpleegkundige')">Verpleegkundige</button>
+    <button type="button" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">Terug naar boven</button>
+  </div>
+
   <script>
-    function shuffleTasks() {
-      document.getElementById('taskTable').innerHTML = `
-        <tr>
-          <th>Taak</th>
-          <th>Wie</th>
-          <th>Status</th>
-        </tr>
-        <tr>
-          <td>Medicatie ophalen</td>
-          <td>Tom</td>
-          <td><span class="status-pill pill-now">Vandaag 17:00</span></td>
-        </tr>
-        <tr>
-          <td>Boodschappen</td>
-          <td>Anne</td>
-          <td><span class="status-pill pill-later">Morgen</span></td>
-        </tr>
-        <tr>
-          <td>Oefeningen begeleiden</td>
-          <td>Sam</td>
-          <td><span class="status-pill pill-now">Vanavond</span></td>
-        </tr>
-        <tr>
-          <td>Telefooncheck</td>
-          <td>Els</td>
-          <td><span class="status-pill pill-now">Binnen 1 uur</span></td>
-        </tr>
-      `;
+    const root = document.documentElement;
+    const themeToggle = document.querySelector('[data-theme-toggle]');
+    let currentTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    root.setAttribute('data-theme', currentTheme);
+    themeToggle.innerHTML = currentTheme === 'dark' ? '<span aria-hidden="true">☀</span>' : '<span aria-hidden="true">☾</span>';
 
-      document.getElementById('burdenScore').textContent = '49 / 100';
-      document.getElementById('burdenFill').style.width = '49%';
-      document.getElementById('burdenText').textContent = 'De belasting zakt wanneer taken beter verdeeld zijn. Dat geeft meer ademruimte.';
-      document.getElementById('openTasks').textContent = '3';
+    themeToggle.addEventListener('click', () => {
+      currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', currentTheme);
+      themeToggle.innerHTML = currentTheme === 'dark' ? '<span aria-hidden="true">☀</span>' : '<span aria-hidden="true">☾</span>';
+    });
 
-      document.getElementById('familyStatusTitle').textContent = 'De taakverdeling is nu evenwichtiger.';
-      document.getElementById('familyStatusText').textContent = 'De opvolging blijft belangrijk, maar de druk op één persoon neemt af.';
-      document.getElementById('familyStatusDot').style.background = 'var(--success)';
-      document.getElementById('familyStatusDot').style.boxShadow = '0 0 0 6px rgba(94, 127, 69, 0.12)';
+    function sendQuestion() {
+      const question = document.getElementById('questionBox').value.trim();
+      const feedback = document.getElementById('questionFeedback');
+      if (!question) {
+        feedback.textContent = 'Typ eerst een korte vraag voor de verpleegkundige.';
+        return;
+      }
+      feedback.textContent = 'Je vraag is verstuurd. De verpleegkundige kan antwoorden via chat of videocall.';
     }
 
-    document.getElementById('familyUpload').addEventListener('change', function (event) {
-      const files = Array.from(event.target.files);
-      const list = document.getElementById('familyFileList');
+    function setConcern() {
+      const box = document.getElementById('statusBox');
+      document.getElementById('statusTitle').textContent = 'Er is extra opvolging aangevraagd.';
+      document.getElementById('statusText').textContent = 'Je zorg is genoteerd. Contact met de verpleegkundige is nu de beste volgende stap.';
+      box.classList.add('warning');
+    }
 
-      if (!files.length) return;
-
-      list.innerHTML = files.map(file => `
-        <div class="file-item">
-          <strong>${file.name}</strong><br>
-          <span class="muted">${Math.round(file.size / 1024)} KB</span>
-        </div>
-      `).join('');
-    });
+    window.sendQuestion = sendQuestion;
+    window.setConcern = setConcern;
   </script>
 </body>
 </html>
